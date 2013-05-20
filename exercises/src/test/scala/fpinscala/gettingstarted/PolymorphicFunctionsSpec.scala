@@ -24,4 +24,10 @@ class PolymorphicFunctionsSpec extends FunSuite {
   test("Array of String is sorted") {
     assert(isSorted(Array("eins", "zwei"), (a: String, b: String) => a < b) === true)
   }
+
+  test("Concrete usage of a polymorphic function") {
+    import PolymorphicFunctions.partial1
+    val multipliedByFiveAsString = partial1(5, (a: Int, b: Double) => s"${a * b}")
+    assert(multipliedByFiveAsString(10.0) === "50.0")
+  }
 }

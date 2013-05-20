@@ -150,8 +150,7 @@ object PolymorphicFunctions {
 
   // Exercise 3: Implement `partial1`.
   
-  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = 
-    ??? 
+  def partial1[A,B,C](a: A, f: (A,B) => C): B => C = f(a,_)
   
   // Exercise 4: Implement `curry`.
 
