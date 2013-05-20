@@ -55,4 +55,20 @@ class ListSpec extends FunSuite {
     assert(List.drop(Nil, 1) == Nil)
   }
 
+  test("dropWhile numbers are odd") {
+    new withList {
+      val drop = List.dropWhile(list) _
+      assert(drop(x => (x % 2 != 0)) === List(2,3,4,5))
+    }
+  }
+
+  test("dropWhile numbers are even") {
+    val drop = List.dropWhile(List(2,4,6,9,11)) _
+    assert(drop(x => (x % 2 == 0)) === List(9, 11))
+  }
+
+  test("dropWhile on empty list") {
+    val drop = List.dropWhile(List()) _
+    assert(drop(x => true) === Nil)
+  }
 }
