@@ -51,7 +51,17 @@ object List { // `List` companion object
     foldRight(l, 1.0)(_ * _)
 
 
-  def tail[A](l: List[A]): List[A] = sys.error("todo")
+  /**
+   * Exercise 3.2
+   *
+   * Implement the function tail for "removing" the first element of a List.
+   * Notice the function takes constant time. What are different choices
+   * you could make in your implementation if the List is Nil?
+   */
+  def tail[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => xs
+  }
 
   def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
 
