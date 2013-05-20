@@ -38,4 +38,21 @@ class ListSpec extends FunSuite {
       assert(List.tail(List()) === Nil)
     }
   }
+
+  test("Drop 5 elements from a list") {
+    new withList {
+      assert(List.drop(list, 5) === Nil)
+    }
+  }
+
+  test("Drop 1 element from a list") {
+    new withList {
+      assert(List.drop(list, 1) === List(2,3,4,5))
+    }
+  }
+
+  test("Drop element from an empty list") {
+    assert(List.drop(Nil, 1) == Nil)
+  }
+
 }

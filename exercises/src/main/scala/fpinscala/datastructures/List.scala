@@ -63,7 +63,16 @@ object List { // `List` companion object
     case Cons(x, xs) => xs
   }
 
-  def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+  /**
+   * Exercise 3.3
+   *
+   * Generalize tail to the function drop, which removes the first n elements
+   * from a list.
+   */
+  def drop[A](l: List[A], n: Int): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => if (n == 0) Cons(x, xs) else drop(xs, n - 1)
+  }
 
   def dropWhile[A](l: List[A])(f: A => Boolean): List[A] = sys.error("todo")
 
