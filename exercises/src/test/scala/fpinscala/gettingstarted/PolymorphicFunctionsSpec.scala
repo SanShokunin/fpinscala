@@ -16,7 +16,7 @@ class PolymorphicFunctionsSpec extends FunSuite {
    * The goal is to implement a polymorphic function `isSorted`, which tests if a
    * given `Array[A]` is sorted by using a given test function.
    */
-  import PolymorphicFunctions.{isSorted, partial1, curry, uncurry}
+  import PolymorphicFunctions.{isSorted, partial1, curry, uncurry, compose}
 
   test("Array of Int is not sorted") {
     assert(isSorted(Array(1,2,4,3), (a: Int, b: Int) => a < b) === false)
@@ -45,5 +45,11 @@ class PolymorphicFunctionsSpec extends FunSuite {
   test("Uncurried polymorphic function") {
     val curried = curry((a: Int, b: Double) => s"${a * b}")
     assert(uncurry(curried)(5, 10.0) == "50.0")
+  }
+
+  test("Compose two functions") {
+    val f = (x: Double) => x / 2
+    val halfSqrt = compose(math.sqrt, f)
+    assert(Math.sqrt(18/2) === halfSqrt(18))
   }
 }
