@@ -154,8 +154,16 @@ object PolymorphicFunctions {
   
   // Exercise 4: Implement `curry`.
 
-  // Note that `=>` associates to the right, so we could 
-  // write the return type as `A => B => C`
+  /**
+   * Note that `=>` associates to the right, so we could
+   * write the return type as `A => B => C`
+   * NOTE: The implementation could have been written also this way (which is
+   *   actually the answer provided by the authors of the book):
+   *   {{{
+   *     def curry[A,B,C](f: (A, B) => C): A => (B => C) =
+   *       a => b => f(a, b)
+   *   }}}
+   */
   def curry[A,B,C](f: (A, B) => C): A => (B => C) = (a: A) => f(a,_)
 
   // NB: The `Function2` trait has a `curried` method already
