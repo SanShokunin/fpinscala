@@ -71,4 +71,14 @@ class ListSpec extends FunSuite {
     val drop = List.dropWhile(List()) _
     assert(drop(x => true) === Nil)
   }
+
+  test("Replace the first element of a non-empty list") {
+    new withList {
+      assert(List.setHead(list)(42) === List(42,2,3,4,5))
+    }
+  }
+
+  test("Replace the first element of an emepty list") {
+    assert(List.setHead(Nil)(42) === Nil)
+  }
 }
