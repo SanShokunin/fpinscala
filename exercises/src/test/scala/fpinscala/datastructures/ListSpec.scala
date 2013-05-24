@@ -81,4 +81,10 @@ class ListSpec extends FunSuite {
   test("Replace the first element of an emepty list") {
     assert(List.setHead(Nil)(42) === Nil)
   }
+
+  test("Return all but the last element of a list") {
+    new withList {
+      assert(List.init(list) === List(1,2,3,4))
+    }
+  }
 }

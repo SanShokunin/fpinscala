@@ -74,17 +74,43 @@ object List { // `List` companion object
     case Cons(x, xs) => if (n == 0) Cons(x, xs) else drop(xs, n - 1)
   }
 
+  /**
+   * Exercise 3.4
+   *
+   * Implement dropWhile,10 which removes elements from the List prefix as long
+   * as they match a predicate. Again, notice these functions take time
+   * proportional only to the number of elements being dropped—we do not need
+   * to make a copy of the entire List.
+   */
   def dropWhile[A](l: List[A])(f: A => Boolean): List[A] = l match {
     case Cons(x, xs) if f(x) => dropWhile(xs)(f)
     case _ => l
   }
 
+  /**
+   * Exercise 3.5
+   *
+   * Using the same idea, implement the function setHead for replacing the first
+   * element of a List with a different value.
+   */
   def setHead[A](l: List[A])(h: A): List[A] = l match {
     case Nil => Nil
     case Cons(x, xs) => Cons(h, xs)
   }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  /**
+   * Exercise 3.6
+   *
+   * Not everything works out so nicely. Implement a function, init, which
+   * returns a List consisting of all but the last element of a List. So, given
+   * List(1,2,3,4), init will return List(1,2,3). Why can't this function be
+   * implemented in constant time like tail?
+   */
+  def init[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, Cons(_, Nil)) => Cons(x, Nil)
+    case Cons(x, xs) => Cons(x, init(xs))
+  }
 
   def length[A](l: List[A]): Int = sys.error("todo")
 
