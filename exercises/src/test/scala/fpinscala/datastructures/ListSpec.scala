@@ -1,54 +1,47 @@
 package fpinscala.datastructures
 
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import fpinscala.datastructures.List._
 
 @RunWith(classOf[JUnitRunner])
-class ListSpec extends FunSuite {
+class ListSpec extends FunSuite with BeforeAndAfter {
 
-  trait withList {
-    import fpinscala.datastructures.List
-    val list = List(1,2,3,4,5)
+  var list: List[Int] = _
+  var largeList: List[Int] = _
+
+  before {
+    list = List(1,2,3,4,5)
+    largeList = List(0 to 1000: _*)
   }
 
   test("Pattern matches (exercise 3.1)") {
-    new withList {
-      val x = list match {
-        case Cons(x, Cons(2, Cons(4, _))) => x
-        case Nil => 42
-        case Cons(x, Cons(y, Cons(3, Cons(4, _)))) => x + y
-        case Cons(h, t) => h + sum(t)
-        case _ => 101
-      }
-      assert(x === 3)
+    val x = list match {
+      case Cons(x, Cons(2, Cons(4, _))) => x
+      case Nil => 42
+      case Cons(x, Cons(y, Cons(3, Cons(4, _)))) => x + y
+      case Cons(h, t) => h + sum(t)
+      case _ => 101
     }
+    assert(x === 3)
   }
 
   test("Tail of a non-empty list") {
-    new withList {
-      assert(List.tail(list) === List(2,3,4,5))
-    }
+    assert(List.tail(list) === List(2,3,4,5))
   }
 
   test("Tail of an empty list") {
-    new withList {
-      assert(List.tail(List()) === Nil)
-    }
+    assert(List.tail(List()) === Nil)
   }
 
   test("Drop 5 elements from a list") {
-    new withList {
-      assert(List.drop(list, 5) === Nil)
-    }
+    assert(List.drop(list, 5) === Nil)
   }
 
   test("Drop 1 element from a list") {
-    new withList {
-      assert(List.drop(list, 1) === List(2,3,4,5))
-    }
+    assert(List.drop(list, 1) === List(2,3,4,5))
   }
 
   test("Drop element from an empty list") {
@@ -56,10 +49,8 @@ class ListSpec extends FunSuite {
   }
 
   test("dropWhile numbers are odd") {
-    new withList {
-      val drop = List.dropWhile(list) _
-      assert(drop(x => (x % 2 != 0)) === List(2,3,4,5))
-    }
+    val drop = List.dropWhile(list) _
+    assert(drop(x => (x % 2 != 0)) === List(2,3,4,5))
   }
 
   test("dropWhile numbers are even") {
@@ -73,9 +64,7 @@ class ListSpec extends FunSuite {
   }
 
   test("Replace the first element of a non-empty list") {
-    new withList {
-      assert(List.setHead(list)(42) === List(42,2,3,4,5))
-    }
+    assert(List.setHead(list)(42) === List(42,2,3,4,5))
   }
 
   test("Replace the first element of an empty list") {
@@ -83,15 +72,11 @@ class ListSpec extends FunSuite {
   }
 
   test("Return all but the last element of a list") {
-    new withList {
-      assert(List.init(list) === List(1,2,3,4))
-    }
+    assert(List.init(list) === List(1,2,3,4))
   }
 
   test("Compute the length of a list") {
-    new withList {
-      assert(List.length(list) === 5)
-    }
+    assert(List.length(list) === 5)
   }
 
   test("Compute the length of an empty list") {
