@@ -10,11 +10,9 @@ import fpinscala.datastructures.List._
 class ListSpec extends FunSuite with BeforeAndAfter {
 
   var list: List[Int] = _
-  var largeList: List[Int] = _
 
   before {
     list = List(1,2,3,4,5)
-    largeList = List(0 to 1000: _*)
   }
 
   test("Pattern matches (exercise 3.1)") {
@@ -81,5 +79,12 @@ class ListSpec extends FunSuite with BeforeAndAfter {
 
   test("Compute the length of an empty list") {
     assert(List.length(Nil) === 0)
+  }
+
+  test("Compute the length of a large list") {
+    intercept[java.lang.StackOverflowError] {
+      val largeList = List(0 to 10000: _*)
+      List.length(largeList)
+    }
   }
 }
