@@ -112,7 +112,12 @@ object List { // `List` companion object
     case Cons(x, xs) => Cons(x, init(xs))
   }
 
-  def length[A](l: List[A]): Int = sys.error("todo")
+  /**
+   * Exercise 3.9
+   *
+   * Compute the length of a list using foldRight
+   */
+  def length[A](l: List[A]): Int = foldRight(l, 0)((_, acc) => acc + 1)
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
 

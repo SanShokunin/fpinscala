@@ -78,7 +78,7 @@ class ListSpec extends FunSuite {
     }
   }
 
-  test("Replace the first element of an emepty list") {
+  test("Replace the first element of an empty list") {
     assert(List.setHead(Nil)(42) === Nil)
   }
 
@@ -86,5 +86,15 @@ class ListSpec extends FunSuite {
     new withList {
       assert(List.init(list) === List(1,2,3,4))
     }
+  }
+
+  test("Compute the length of a list") {
+    new withList {
+      assert(List.length(list) === 5)
+    }
+  }
+
+  test("Compute the length of an empty list") {
+    assert(List.length(Nil) === 0)
   }
 }
