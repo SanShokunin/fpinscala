@@ -5,6 +5,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import fpinscala.datastructures.List._
+import scala.annotation.tailrec
 
 @RunWith(classOf[JUnitRunner])
 class ListSpec extends FunSuite with BeforeAndAfter {
@@ -13,6 +14,25 @@ class ListSpec extends FunSuite with BeforeAndAfter {
 
   before {
     list = List(1,2,3,4,5)
+  }
+
+  /**
+   * This functions helps on creation of large lists.
+   *
+   * The creation of large lists, e.g. by List(1 to 10000: _*), i.e. calling
+   * fpinscala.datastructure.List.apply() would cause a StackOverflowError, since
+   * the implementation of apply not tail-recursive.
+   *
+   * @param n
+   * @return a list of n integers
+   */
+  private def createIntList(n: Int): List[Int] = {
+    @tailrec
+    def go(l: List[Int], n: Int): List[Int] = {
+      if (n == 0) l
+      else go(List.append(Cons(n, Nil), l), n - 1)
+    }
+    go(Nil, n)
   }
 
   test("Pattern matches (exercise 3.1)") {
@@ -81,10 +101,13 @@ class ListSpec extends FunSuite with BeforeAndAfter {
     assert(List.length(Nil) === 0)
   }
 
-  test("Compute the length of a large list") {
+  test("Compute the length of a large list using the not tail-recursive function foldRight behind the scene") {
     intercept[java.lang.StackOverflowError] {
-      val largeList = List(0 to 10000: _*)
-      List.length(largeList)
+      List.length(createIntList(100000))
     }
+  }
+
+  test("Compute the length of a list using (tail-recursive) foldLeft") {
+    assert(List.foldLeft(createIntList(100000), 0)((acc, _) => acc + 1) === 100000)
   }
 }

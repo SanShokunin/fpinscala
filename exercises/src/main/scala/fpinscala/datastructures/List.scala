@@ -1,5 +1,7 @@
 package fpinscala.datastructures
 
+import scala.annotation.tailrec
+
 sealed trait List[+A] // `List` data type
 case object Nil extends List[Nothing] // data constructor for `List`
 case class Cons[+A](head: A, tail: List[A]) extends List[A]
@@ -119,7 +121,19 @@ object List { // `List` companion object
    */
   def length[A](l: List[A]): Int = foldRight(l, 0)((_, acc) => acc + 1)
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
+  /**
+   * Exercise 3.10
+   *
+   * The function foldRight is not tail-recursive and will StackOverflow for
+   * large lists. Convince yourself that this is the case, then write another
+   * general list-recursion function, foldLeft that is tail-recursive, using
+   * the techniques we discussed in the previous chapter.
+   */
+  @tailrec
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = l match {
+    case Nil => z
+    case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
+  }
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
