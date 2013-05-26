@@ -135,5 +135,16 @@ object List { // `List` companion object
     case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
   }
 
+  /**
+   * Exercise 3.11
+   *
+   * Write sum, product, and a function to compute the length of a list using foldLeft.
+   */
+  def sum3(l: List[Int]) = foldLeft(l, 0)(_ + _)
+
+  def product3(l: List[Double]) = foldLeft(l, 1.0)(_ * _)
+
+  def length3[A](l: List[A]): Int = foldLeft(l, 0)((acc, _) => acc + 1)
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

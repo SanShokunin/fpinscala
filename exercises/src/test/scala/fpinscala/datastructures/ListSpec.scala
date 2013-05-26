@@ -110,4 +110,16 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Compute the length of a list using (tail-recursive) foldLeft") {
     assert(List.foldLeft(createIntList(100000), 0)((acc, _) => acc + 1) === 100000)
   }
+
+  test("Compute the sum of a list using foldLeft") {
+    assert(List.sum3(list) === 15)
+  }
+
+  test("Compute the product of a list using foldLeft") {
+    assert(List.product3(List(1.0, 2.0, 3.0, 4.0, 5.0)) === 120.0)
+  }
+
+  test("Compute the length of a list using foldLeft") {
+    assert(List.length3(list) === 5)
+  }
 }
