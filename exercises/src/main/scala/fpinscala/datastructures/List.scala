@@ -146,5 +146,13 @@ object List { // `List` companion object
 
   def length3[A](l: List[A]): Int = foldLeft(l, 0)((acc, _) => acc + 1)
 
+  /**
+   * Exercise 3.12
+   *
+   * Write a function that returns the reverse of a list (so given List(1,2,3)
+   * it returns List(3,2,1)). See if you can write it using a fold.
+   */
+  def reverse[A](l: List[A]): List[A] = foldLeft(l, List[A]())((acc, elm) => Cons(elm, acc))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

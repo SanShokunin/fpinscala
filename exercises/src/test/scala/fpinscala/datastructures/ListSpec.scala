@@ -122,4 +122,8 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Compute the length of a list using foldLeft") {
     assert(List.length3(list) === 5)
   }
+
+  test("Reverse a list") {
+    assert(List.reverse(list) === List(5, 4, 3, 2, 1))
+  }
 }
