@@ -154,5 +154,14 @@ object List { // `List` companion object
    */
   def reverse[A](l: List[A]): List[A] = foldLeft(l, List[A]())((acc, elm) => Cons(elm, acc))
 
+  /**
+   * Exercise 3.13
+   *
+   * Can you write foldLeft in terms of foldRight? How about the other way around?
+   */
+  def foldLeft2[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+
+  def foldRight2[A,B](l: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(l), z)((a, b) => f(b, a))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

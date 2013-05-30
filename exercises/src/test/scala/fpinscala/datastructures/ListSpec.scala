@@ -1,6 +1,6 @@
 package fpinscala.datastructures
 
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.{Ignore, BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
@@ -125,5 +125,25 @@ class ListSpec extends FunSuite with BeforeAndAfter {
 
   test("Reverse a list") {
     assert(List.reverse(list) === List(5, 4, 3, 2, 1))
+  }
+
+  ignore("Compute the length of a list using foldLeft2 which is written in terms of foldRight") {
+    intercept[java.lang.StackOverflowError] {
+      assert(List.foldLeft2(createIntList(100000), 0)((acc, _) => acc + 1) === 100000)
+    }
+  }
+
+  test("Compute the length of a list using foldRight2 which is written in terms of the tail-recursive foldLeft") {
+    assert(List.foldRight2(createIntList(100000), 0)((_, acc) => acc + 1) === 100000)
+  }
+
+  ignore("Result of foldLeft and foldLeft2 is equal") {
+    val l = List("s", "a", "n")
+    assert(List.foldLeft(l, "")(_+_) === List.foldLeft2(l, "")(_+_))
+  }
+
+  test("Result of foldRight and foldRight2 is equal") {
+    val l = List("s", "a", "n")
+    assert(List.foldRight(l, "")(_+_) === List.foldRight2(l, "")(_+_))
   }
 }
