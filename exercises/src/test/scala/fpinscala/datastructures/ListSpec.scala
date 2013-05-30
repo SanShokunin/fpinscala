@@ -146,4 +146,12 @@ class ListSpec extends FunSuite with BeforeAndAfter {
     val l = List("s", "a", "n")
     assert(List.foldRight(l, "")(_+_) === List.foldRight2(l, "")(_+_))
   }
+
+  test("Append an item to list with foldRight under the hood") {
+    assert(Cons(1, Cons(2, Nil)) === List.append2(Cons(1, Nil), Cons(2, Nil)))
+  }
+
+  test("Append an item to an empty list with foldRight under the hood") {
+    assert(Cons(1, Nil) === List.append(Nil, Cons(1, Nil)))
+  }
 }
