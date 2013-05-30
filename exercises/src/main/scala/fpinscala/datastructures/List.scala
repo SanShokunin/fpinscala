@@ -155,7 +155,7 @@ object List { // `List` companion object
   def reverse[A](l: List[A]): List[A] = foldLeft(l, List[A]())((acc, elm) => Cons(elm, acc))
 
   /**
-   * Exercise 3.13
+   * Exercise 3.13 (hard)
    *
    * Can you write foldLeft in terms of foldRight? How about the other way around?
    */
@@ -169,6 +169,15 @@ object List { // `List` companion object
    * Implement append in terms of either foldLeft or foldRight.
    */
   def append2[A](a1: List[A], a2: List[A]): List[A] = foldRight(a1, a2)(Cons(_, _))
+
+  /**
+   * Exercise 3.15 (hard)
+   *
+   * Write a function that concatenates a list of lists into a single list. Its
+   * runtime should be linear in the total length of all lists. Try to use
+   * functions we have already defined.
+   */
+  def concat[A](l: List[List[A]]): List[A] = ???
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
