@@ -201,4 +201,18 @@ object List { // `List` companion object
    * while maintaining the structure of the list.
    */
   def map[A,B](l: List[A])(f: A => B): List[B] = foldRight(l, Nil: List[B])((a,b) => Cons(f(a),b))
+
+  /**
+   * Exercise 3.19
+   *
+   * Write a function filter that removes elements from a list unless they
+   * satisfy a given predicate.
+   */
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => if (f(x)) Cons(x, filter(xs)(f)) else filter(xs)(f)
+  }
+
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((x, xs) => if (f(x)) Cons(x, xs) else xs)
 }

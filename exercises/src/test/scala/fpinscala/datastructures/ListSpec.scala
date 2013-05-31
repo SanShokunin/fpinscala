@@ -175,4 +175,12 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Convert List[Double] to List[String] using map") {
     assert(List("1", "2", "3", "4", "5") === List.map(list)(_ toString))
   }
+
+  test("Filter even number from a list") {
+    assert(List(2,4) === List.filter(list)(_ % 2 == 0))
+  }
+
+  test("Filter even numbers form a list with foldRight under the hood") {
+    assert(List(2,4) === List.filter2(list)(_ % 2 == 0))
+  }
 }
