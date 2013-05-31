@@ -187,5 +187,12 @@ object List { // `List` companion object
    */
   def add1(l: List[Int]): List[Int] = foldRight(l, List[Int]())((x, xs) => Cons(x + 1, xs))
 
+  /**
+   * Exercise 3.17
+   *
+   * Write a function that turns each value in a List[Double] into a String.
+   */
+  def doubleToString(l: List[Double]): List[String] = foldRight(l, Nil:List[String])((x, xs) => Cons(x toString, xs))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
