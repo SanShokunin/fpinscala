@@ -167,4 +167,12 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Convert List[Double] to List[String]") {
     assert(List.doubleToString(List(1.0, 2.0)) === List("1.0", "2.0"))
   }
+
+  test("Add 1 to each element of a list using map") {
+    assert(List(2,3,4,5,6) === List.map(list)(_ + 1))
+  }
+
+  test("Convert List[Double] to List[String] using map") {
+    assert(List("1", "2", "3", "4", "5") === List.map(list)(_ toString))
+  }
 }
