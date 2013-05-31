@@ -155,7 +155,7 @@ class ListSpec extends FunSuite with BeforeAndAfter {
     assert(Cons(1, Nil) === List.append(Nil, Cons(1, Nil)))
   }
 
-  ignore("Concatenate a list of lists into a single list") {
+  test("Concatenate a list of lists into a single list") {
     val l = List(List(1,2,3), List(4,5,6))
     assert(List.concat(l) === Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Cons(6, Nil)))))))
   }
@@ -184,8 +184,12 @@ class ListSpec extends FunSuite with BeforeAndAfter {
     assert(List(2,4) === List.filter2(list)(_ % 2 == 0))
   }
 
-  test("flatMap") {
+  test("flatMap in terms of foldRight") {
     assert(flatMap(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3))
+  }
+
+  test("flatMap2 in terms of concat") {
+    assert(flatMap2(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3))
   }
 
   test("Filter even numbers form a list with flatMap under the hood") {

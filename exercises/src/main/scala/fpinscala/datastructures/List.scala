@@ -177,7 +177,7 @@ object List { // `List` companion object
    * runtime should be linear in the total length of all lists. Try to use
    * functions we have already defined.
    */
-  def concat[A](l: List[List[A]]): List[A] = ???
+  def concat[A](l: List[List[A]]): List[A] = foldRight(l, Nil: List[A])((x, xs) => append(x, xs))
 
   /**
    * Exercise 3.16
@@ -227,6 +227,8 @@ object List { // `List` companion object
    * List(1,1,2,2,3,3).
    */
   def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = foldRight(l, Nil: List[B])((x, xs) => append(f(x), xs))
+
+  def flatMap2[A,B](l: List[A])(f: A => List[B]): List[B] = concat(map(l)(f))
 
   /**
    * Exercise 3.21
