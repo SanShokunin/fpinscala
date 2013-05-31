@@ -179,5 +179,13 @@ object List { // `List` companion object
    */
   def concat[A](l: List[List[A]]): List[A] = ???
 
+  /**
+   * Exercise 3.16
+   *
+   * Write a function that transforms a list of integers by adding 1 to each
+   * element. (Reminder: this should be a pure function that returns a new List!)
+   */
+  def add1(l: List[Int]): List[Int] = foldRight(l, List[Int]())((x, xs) => Cons(x + 1, xs))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

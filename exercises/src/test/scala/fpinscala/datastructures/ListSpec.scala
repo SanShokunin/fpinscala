@@ -159,4 +159,8 @@ class ListSpec extends FunSuite with BeforeAndAfter {
     val l = List(List(1,2,3), List(4,5,6))
     assert(List.concat(l) === Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Cons(6, Nil)))))))
   }
+
+  test("Add 1 to each element of a list") {
+    assert(List(2,3,4,5,6) == List.add1(list))
+  }
 }
