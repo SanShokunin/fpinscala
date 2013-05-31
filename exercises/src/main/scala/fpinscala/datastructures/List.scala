@@ -215,4 +215,17 @@ object List { // `List` companion object
 
   def filter2[A](l: List[A])(f: A => Boolean): List[A] =
     foldRight(l, Nil: List[A])((x, xs) => if (f(x)) Cons(x, xs) else xs)
+
+  /**
+   * Exercise 3.20
+   *
+   * Write a function flatMap, that works like map except that the function given
+   * will return a list instead of a single result, and that list should be
+   * inserted into the final resulting list.
+   *
+   * For instance flatMap(List(1,2,3))(i => List(i,i)) should result in
+   * List(1,1,2,2,3,3).
+   */
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = foldRight(l, Nil: List[B])((x, xs) => append(f(x), xs))
+
 }
