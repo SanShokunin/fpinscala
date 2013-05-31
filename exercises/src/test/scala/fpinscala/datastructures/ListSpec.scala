@@ -187,4 +187,8 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("flatMap") {
     assert(flatMap(List(1,2,3))(i => List(i,i)) === List(1,1,2,2,3,3))
   }
+
+  test("Filter even numbers form a list with flatMap under the hood") {
+    assert(List(2,4) === List.filter3(list)(_ % 2 == 0))
+  }
 }
