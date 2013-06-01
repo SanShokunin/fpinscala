@@ -30,4 +30,8 @@ class TreeSpec extends FunSuite with BeforeAndAfter {
   test("Compute the depth of an empty tree") {
     assert(Tree.depth(Leaf(1)) === 1)
   }
+
+  test("Map values of a tree") {
+    assert(Tree.map(tree)(_*2) === Branch(Leaf(2),Branch(Leaf(4), Leaf(6))))
+  }
 }
