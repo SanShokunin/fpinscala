@@ -219,4 +219,8 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Combine two lists of Integers of different length (2) in terms of generic function combineLists") {
     assert(List.zipWith(List(1,2,3), List(4,5))(_*_) === List(4,10))
   }
+
+  ignore("Verify if a list contains another list as a subsequence") {
+    assert(List.hasSubsequence(list, List(3,4)))
+  }
 }

@@ -258,4 +258,18 @@ object List { // `List` companion object
     case (_, Nil) | (Nil, _) => Nil
     case (Cons(h1, t1), Cons(h2,t2)) => Cons(f(h1,h2), zipWith(t1, t2)(f))
   }
+
+  /**
+   * Exercise 3.24 (hard)
+   *
+   * Implement hasSubsequence for checking whether a List contains another List
+   * as a subsequence. For instance, List(1,2,3,4) would have List(1,2),
+   * List(2,3), and List(4) as subsequences, among others.
+   *
+   * You may have some difficulty finding a concise purely functional
+   * implementation that is also efficient. That's okay. Implement the function
+   * however comes most naturally. We will return to this implementation in a
+   * couple of chapters and hopefully improve on it.
+   */
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = ???
 }
