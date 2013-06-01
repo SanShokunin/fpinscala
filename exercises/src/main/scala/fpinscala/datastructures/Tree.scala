@@ -17,4 +17,13 @@ object Tree {
     case Branch(l, r) => 1 + size(l) + size(r)
   }
 
+  /**
+   * Exercise 3.26
+   *
+   * Write a function maximum that returns the maximum element in a Tree[Int].
+   */
+  def maximum(t: Tree[Int]): Int = t match {
+    case Leaf(v) => v
+    case Branch(l, r) => maximum(l) max maximum(r)
+  }
 }

@@ -18,4 +18,8 @@ class TreeSpec extends FunSuite with BeforeAndAfter {
   test("Count the number of nodes in a tree") {
     assert(Tree.size(tree) === 5)
   }
+
+  test("Return the maximum element of a tree") {
+    assert(Tree.maximum(tree) === 3)
+  }
 }
