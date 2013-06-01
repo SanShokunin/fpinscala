@@ -195,4 +195,16 @@ class ListSpec extends FunSuite with BeforeAndAfter {
   test("Filter even numbers form a list with flatMap under the hood") {
     assert(List(2,4) === List.filter3(list)(_ % 2 == 0))
   }
+
+  test("Combine two lists of Integers") {
+    assert(List.addIntLists(List(1,2,3), List(4,5,6)) === List(5,7,9))
+  }
+
+  test("Combine two lists of Integers of different length") {
+    assert(List.addIntLists(List(1,2), List(4,5,6)) === List(5,7))
+  }
+
+  test("Combine two lists of Integers of different length (2)") {
+    assert(List.addIntLists(List(1,2,3), List(4,5)) === List(5,7))
+  }
 }

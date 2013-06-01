@@ -236,4 +236,17 @@ object List { // `List` companion object
    * Can you use flatMap to implement filter?
    */
   def filter3[A](l: List[A])(f: A => Boolean): List[A] = flatMap(l)(a => if (f(a)) Cons(a, Nil) else Nil)
+
+  /**
+   * Exercise 3.22
+   *
+   * Write a function that accepts two lists and constructs a new list by adding
+   * corresponding elements. For example, List(1,2,3) and List(4,5,6) becomes
+   * List(5,7,9).
+   */
+  def addIntLists(l: List[Int], m: List[Int]): List[Int] = (l,m) match {
+    case (_, Nil) | (Nil, _) => Nil
+    case (Cons(h1, t1), Cons(h2,t2)) => Cons(h1+h2, addIntLists(t1, t2))
+  }
+
 }
