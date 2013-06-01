@@ -22,4 +22,12 @@ class TreeSpec extends FunSuite with BeforeAndAfter {
   test("Return the maximum element of a tree") {
     assert(Tree.maximum(tree) === 3)
   }
+
+  test("Compute the depth of a tree") {
+    assert(Tree.depth(tree) === 2)
+  }
+
+  test("Compute the depth of an empty tree") {
+    assert(Tree.depth(Leaf(1)) === 1)
+  }
 }
