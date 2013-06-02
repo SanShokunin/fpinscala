@@ -1,7 +1,10 @@
 package fpinscala.errorhandling
 
 sealed trait Option[+A] {
-  def map[B](f: A => B): Option[B] = ???
+  def map[B](f: A => B): Option[B] = this match {
+    case Some(a) => Some(f(a))
+    case None => None
+  }
   
   def getOrElse[B>:A](default: => B): B = this match {
     case Some(a) => a
