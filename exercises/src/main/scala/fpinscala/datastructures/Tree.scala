@@ -17,9 +17,7 @@ object Tree {
     case Branch(l, r) => 1 + size(l) + size(r)
   }
 
-  def size2[A](t: Tree[A]): Int = fold(t)(a => 1) { (l,r) =>
-    1 + size2(l) + size2(r)
-  }
+  def size2[A](t: Tree[A]): Int = fold(t)(a => 1)(1 + _ + _)
 
   /**
    * Exercise 3.26
@@ -31,9 +29,7 @@ object Tree {
     case Branch(l, r) => maximum(l) max maximum(r)
   }
 
-  def maximum2(t: Tree[Int]): Int = fold(t)(a => a){ (l,r) =>
-    maximum2(l) max maximum2(r)
-  }
+  def maximum2(t: Tree[Int]): Int = fold(t)(a => a)(_ max _)
 
   /**
    * Exercise 3.27
@@ -46,9 +42,7 @@ object Tree {
     case Branch(l, r) => 1 + depth(l) max depth(r)
   }
 
-  def depth2[A](t: Tree[A]): Int = fold(t)(a => 1) { (l,r) =>
-    1 + depth2(l) max depth2(r)
-  }
+  def depth2[A](t: Tree[A]): Int = fold(t)(a => 1)(1 + _ max _)
 
   /**
    * Exercise 3.28
@@ -61,9 +55,7 @@ object Tree {
     case Branch(l, r) => Branch(map(l)(f), map(r)(f))
   }
 
-  def map2[A,B](t: Tree[A])(f: A => B): Tree[B] = fold(t)(a => Leaf(f(a)): Tree[B]) { (l,r) =>
-    Branch(map2(l)(f), map2(r)(f))
-  }
+  def map2[A,B](t: Tree[A])(f: A => B): Tree[B] = fold(t)(a => Leaf(f(a)): Tree[B])(Branch(_,_))
 
   /**
    * Exercise 3.29
@@ -73,9 +65,9 @@ object Tree {
    * general function. Can you draw an analogy between this fold function and
    * the left and right folds for List?
    */
-  def fold[A,B](t: Tree[A])(z: A => B)(g: (Tree[A], Tree[A]) => B): B = t match {
+  def fold[A,B](t: Tree[A])(z: A => B)(g: (B, B) => B): B = t match {
     case Leaf(a) => z(a)
-    case Branch(l,r) => g(l,r)
+    case Branch(l,r) => g(fold(l)(z)(g),fold(r)(z)(g))
   }
 
 }
