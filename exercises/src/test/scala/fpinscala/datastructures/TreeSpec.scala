@@ -34,4 +34,24 @@ class TreeSpec extends FunSuite with BeforeAndAfter {
   test("Map values of a tree") {
     assert(Tree.map(tree)(_*2) === Branch(Leaf(2),Branch(Leaf(4), Leaf(6))))
   }
+
+  test("Compute the number of nodes in a tree in terms of fold") {
+    assert(Tree.size2(tree) === 5)
+  }
+
+  test("Return the maximum element of a tree in terms of fold") {
+    assert(Tree.maximum2(tree) === 3)
+  }
+
+  test("Compute the depth of a tree in terms of fold") {
+    assert(Tree.depth2(tree) === 2)
+  }
+
+  test("Compute the depth of an empty tree in terms of fold") {
+    assert(Tree.depth2(Leaf(1)) === 1)
+  }
+
+  test("Map values of a tree in terms of fold") {
+    assert(Tree.map2(tree)(_*2) === Branch(Leaf(2),Branch(Leaf(4), Leaf(6))))
+  }
 }
