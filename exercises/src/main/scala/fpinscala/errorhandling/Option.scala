@@ -10,28 +10,21 @@ sealed trait Option[+A] {
   /*
   Of course, we can also implement `flatMap` with explicit pattern matching.
   */
-  def flatMap_1[B](f: A => Option[B]): Option[B] = this match {
-    case None => None
-    case Some(a) => f(a)
-  }
+  def flatMap_1[B](f: A => Option[B]): Option[B] = ???
   
   def orElse[B>:A](ob: => Option[B]): Option[B] = ???
   
   /*
   Again, we can implement this with explicit pattern matching. 
   */
-  def orElse_1[B>:A](ob: => Option[B]): Option[B] = this match {
-    case None => ob 
-    case _ => this
-  }
+  def orElse_1[B>:A](ob: => Option[B]): Option[B] = ???
   
   def filter(f: A => Boolean): Option[A] = ???
 
   /*
   This can also be defined in terms of `flatMap`.
   */
-  def filter_1(f: A => Boolean): Option[A] =
-    flatMap(a => if (f(a)) Some(a) else None)
+  def filter_1(f: A => Boolean): Option[A] = ???
 }
 
 case class Some[+A](get: A) extends Option[A]
