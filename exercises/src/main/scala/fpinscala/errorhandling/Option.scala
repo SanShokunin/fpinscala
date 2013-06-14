@@ -11,26 +11,32 @@ sealed trait Option[+A] {
     case None => default
   }
   
-  def flatMap[B](f: A => Option[B]): Option[B] = ???
+  def flatMap[B](f: A => Option[B]): Option[B] = map(f) getOrElse None
   
   /*
   Of course, we can also implement `flatMap` with explicit pattern matching.
   */
-  def flatMap_1[B](f: A => Option[B]): Option[B] = ???
+  def flatMap_1[B](f: A => Option[B]): Option[B] = this match {
+    case Some(a) => f(a)
+    case None => None
+  }
   
-  def orElse[B>:A](ob: => Option[B]): Option[B] = ???
+  def orElse[B>:A](ob: => Option[B]): Option[B] = this map(Some(_)) getOrElse ob
   
   /*
   Again, we can implement this with explicit pattern matching. 
   */
-  def orElse_1[B>:A](ob: => Option[B]): Option[B] = ???
+  def orElse_1[B>:A](ob: => Option[B]): Option[B] = this match {
+    case None => ob
+    case _ => this
+  }
   
-  def filter(f: A => Boolean): Option[A] = ???
+  def filter(f: A => Boolean): Option[A] = map(a => if (f(a)) Some(a) else None) getOrElse None
 
   /*
   This can also be defined in terms of `flatMap`.
   */
-  def filter_1(f: A => Boolean): Option[A] = ???
+  def filter_1(f: A => Boolean): Option[A] = flatMap(a => if (f(a)) Some(a) else None)
 }
 
 case class Some[+A](get: A) extends Option[A]
