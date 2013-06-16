@@ -76,4 +76,6 @@ class OptionSpec extends FunSuite with BeforeAndAfter {
   test("Filter type Char on Some(1) with a filter function based on flatMap") {
     assert(someone.filter_1(_.isInstanceOf[Char]) === None)
   }
+
+  ignore("Exercise 4.2") {}
 }
