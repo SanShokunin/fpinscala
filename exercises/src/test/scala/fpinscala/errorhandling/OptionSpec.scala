@@ -102,4 +102,16 @@ class OptionSpec extends FunSuite with BeforeAndAfter {
   test("Only one pattern matches") {
     assert(Option.bothMatch_2("Wrong", "^.es.$", "Test") === Some(false))
   }
+
+  test("Combine a list of Options into one option containing a list of all the Some values in the original list") {
+    assert(Option.sequence(List(someone, someone)) === Some(List(1,1)))
+  }
+
+  test("Combining a list of Options (incl. None) should return None") {
+    assert(Option.sequence(List(none, someone)) === None)
+  }
+
+  test("Combining a list of Options (incl. None) should return None (2)") {
+    assert(Option.sequence(List(someone, none)) === None)
+  }
 }
