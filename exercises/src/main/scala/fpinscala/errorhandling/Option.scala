@@ -90,7 +90,14 @@ object Option {
     f(s) && g(s)))
   def variance(xs: Seq[Double]): Option[Double] = sys.error("todo")
 
-  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = sys.error("todo")
+  /**
+   * Exercise 4.3
+   *
+   * Write a generic function map2, that combines two Option values using a
+   * binary function. If either Option value is None, then the return value is
+   * too.
+   */
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = a flatMap(a => b map(b => f(a,b)))
 
   def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = sys.error("todo")
 

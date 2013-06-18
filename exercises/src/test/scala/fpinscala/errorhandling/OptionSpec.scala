@@ -78,4 +78,20 @@ class OptionSpec extends FunSuite with BeforeAndAfter {
   }
 
   ignore("Exercise 4.2") {}
+
+  test("A generic function map2, that combines two Option values using a binary function.") {
+    assert(Option.map2(someone, someone)(_+_) === Some(2))
+  }
+
+  test("A generic function map2, that combines two Option values using a binary function (2).") {
+    assert(Option.map2(someone, none)(_+_) === None)
+  }
+
+  test("A generic function map2, that combines two Option values using a binary function (3).") {
+    assert(Option.map2(none, someone)(_+_) === None)
+  }
+
+  test("A generic function map2, that combines two Option values using a binary function (4).") {
+    assert(Option.map2(none, none)(_+_) === None)
+  }
 }
