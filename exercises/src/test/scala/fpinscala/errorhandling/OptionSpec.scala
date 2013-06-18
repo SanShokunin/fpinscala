@@ -94,4 +94,12 @@ class OptionSpec extends FunSuite with BeforeAndAfter {
   test("A generic function map2, that combines two Option values using a binary function (4).") {
     assert(Option.map2(none, none)(_+_) === None)
   }
+
+  test("Both patterns should match") {
+    assert(Option.bothMatch_2("^T.*t$", "^.es.$", "Test") === Some(true))
+  }
+
+  test("Only one pattern matches") {
+    assert(Option.bothMatch_2("Wrong", "^.es.$", "Test") === Some(false))
+  }
 }

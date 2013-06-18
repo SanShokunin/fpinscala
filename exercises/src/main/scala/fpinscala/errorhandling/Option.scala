@@ -99,7 +99,12 @@ object Option {
    */
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = a flatMap(a => b map(b => f(a,b)))
 
-  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = sys.error("todo")
+  /**
+   * Exercise 4.4
+   *
+   * Re-implement bothMatch above in terms of this new function, to the extent possible.
+   */
+  def bothMatch_2(pat1: String, pat2: String, s: String): Option[Boolean] = map2(mkMatcher(pat1), mkMatcher(pat2))(_(s) && _(s))
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
 
