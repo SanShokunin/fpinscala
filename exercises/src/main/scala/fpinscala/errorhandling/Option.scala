@@ -114,10 +114,7 @@ object Option {
    * original list contains None even once, the result of the function should
    * be None, otherwise the result should be Some with a list of all the values.
    */
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
-    case Some(x) :: xs if (!xs.contains(None)) => Some(x :: sequence(xs).getOrElse(Nil))
-    case _ => None
-  }
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = traverse(a)(b => b)
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = a match {
     case Nil => Some(Nil)
