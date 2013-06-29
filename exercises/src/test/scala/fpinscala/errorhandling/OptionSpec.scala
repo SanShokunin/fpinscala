@@ -3,6 +3,7 @@ package fpinscala.errorhandling
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import java.util.regex.Pattern
 
 @RunWith(classOf[JUnitRunner])
 class OptionSpec extends FunSuite with BeforeAndAfter {
@@ -113,5 +114,13 @@ class OptionSpec extends FunSuite with BeforeAndAfter {
 
   test("Combining a list of Options (incl. None) should return None (2)") {
     assert(Option.sequence(List(someone, none)) === None)
+  }
+
+  test("Convert a list of Options (no 'None's) into a Option containing a list of values") {
+    assert(Option.traverse(List(someone, someone))(a => a) === Some(List(1, 1)))
+  }
+
+  test("Convert a list of Options (with 'None's) into None") {
+    assert(Option.traverse(List(someone, none))(a => a) === None)
   }
 }
