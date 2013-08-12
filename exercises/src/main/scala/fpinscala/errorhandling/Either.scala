@@ -52,4 +52,22 @@ object Either {
       case e: Exception => Left(e)
     }
 
+  /**
+   * Exercise 4.8
+   *
+   * Implement sequence for Either (version with pattern matching and explicit
+   * recursion).
+   */
+  def sequence[E,A](es: List[Either[E, A]]): Either[E, List[A]] = es match {
+    case Nil => Right(Nil)
+    case x :: xs => x.map2(sequence(xs))(_ :: _)
+  }
+
+  /**
+   * Exercise 4.8
+   *
+   * Implement sequence for Either (version with foldRight).
+   */
+  def sequence_1[E,A](es: List[Either[E, A]]): Either[E, List[A]] = es.foldRight[Either[E,List[A]]](Right(Nil))((a, b) => a.map2(b)(_ :: _))
+
 }

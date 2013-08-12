@@ -4,6 +4,8 @@ import org.scalatest.{FunSuite, BeforeAndAfter}
 
 class EitherSpec extends FunSuite with BeforeAndAfter {
 
+  val listWithRights = List(Right(1), Right(2), Right(3))
+
   test("A for comprehension with a Left value returns that Left value") {
     val result = for {
       age <- Right(42)
@@ -22,4 +24,13 @@ class EitherSpec extends FunSuite with BeforeAndAfter {
       }
     assert(result === Left("invalid name"))
   }
+
+  test("A list List[Either[E,A]] should be transformed into a Either[E, List[A]]") {
+    assert(Either.sequence(listWithRights) === Right(List(1,2,3)))
+  }
+
+  test("A list List[Either[E,A]] should be transformed into a Either[E, List[A]] using foldRight under the hood") {
+    assert(Either.sequence_1(listWithRights) === Right(List(1,2,3)))
+  }
+
 }
