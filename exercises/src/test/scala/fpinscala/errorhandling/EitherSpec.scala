@@ -33,4 +33,12 @@ class EitherSpec extends FunSuite with BeforeAndAfter {
     assert(Either.sequence_1(listWithRights) === Right(List(1,2,3)))
   }
 
+  test("A list of Right[Int]s should be successfully traversed and incremented") {
+    assert(Either.traverse(listWithRights)(_ map(_ + 1)) === Right(List(2,3,4)))
+  }
+
+  test("A list List[Either[E,A]] should be transformed into a Either[E, List[A]] with sequence in terms of traverse") {
+    assert(Either.sequence_2(listWithRights) === Right(List(1,2,3)))
+  }
+
 }
