@@ -16,7 +16,19 @@ trait Stream[+A] {
 
   def exists(p: A => Boolean): Boolean = foldRight(false)((a, b) => p(a) || b)
 
-  def take(n: Int): Stream[A] = sys.error("todo")
+  /**
+   * Exercise 5.2:
+   *
+   * Write a function take for returning the first n elements of a
+   * Stream.
+   *
+   * @param n Number of elements to take from this streams' head
+   * @return Stream of n or less elements or even empty Stream
+   */
+  def take(n: Int): Stream[A] = uncons match {
+    case Some((h, t)) if n > 0 => cons(h, t.take(n-1))
+    case _ => empty
+  }
 
   def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
 
@@ -29,7 +41,8 @@ trait Stream[+A] {
    * force its evaluation and let us look at it in the REPL. You can convert to
    * the regular List type in the standard library. You can place this and
    * other functions that accept a Stream inside the Stream trait.
-   * @return
+   *
+   * @return A list of the streams elements
    */
   def toList: List[A] = foldRight(Nil:List[A])(_ :: _)
 
