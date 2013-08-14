@@ -31,4 +31,12 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
     assert(stream.takeWhile(_ == 0).toList === Nil)
   }
 
+  test("The given predicate does not match for all elements in the Stream") {
+    assert(stream.forAll(_ % 2 == 0) === false)
+  }
+
+  test("The given predicate does match for elements in the Stream") {
+    assert(stream.forAll(_ < 10) === true)
+  }
+
 }
