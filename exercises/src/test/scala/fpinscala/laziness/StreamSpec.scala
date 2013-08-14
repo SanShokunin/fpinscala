@@ -23,4 +23,12 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
     assert(stream.take(4).toList === List(1,2,3))
   }
 
+  test("Take while predicate matches") {
+    assert(stream.takeWhile(_ <= 2).toList === List(1,2))
+  }
+
+  test("Take while non of the elements within the stream match the predicate") {
+    assert(stream.takeWhile(_ == 0).toList === Nil)
+  }
+
 }

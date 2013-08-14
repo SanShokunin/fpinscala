@@ -30,7 +30,19 @@ trait Stream[+A] {
     case _ => empty
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
+  /**
+   * Exercise 5.3:
+   *
+   * Write the function takeWhile for returning all starting elements of a
+   * Stream that match the given predicate.
+   *
+   * @param p Predicate function
+   * @return Stream of n or less elements or even an empty Stream
+   */
+  def takeWhile(p: A => Boolean): Stream[A] = uncons match {
+    case Some((h, t)) if p(h) => cons(h, t.takeWhile(p))
+    case _ => empty
+  }
 
   def forAll(p: A => Boolean): Boolean = sys.error("todo")
 
