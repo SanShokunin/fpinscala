@@ -86,6 +86,66 @@ trait Stream[+A] {
    */
   def toList: List[A] = foldRight(Nil:List[A])(_ :: _)
 
+  /**
+   * Exercise 5.6:
+   *
+   * Implement map, filter, append, and flatMap using foldRight. Because the
+   * implementations are incremental, chains of transformations will avoid fully
+   * instantiating the intermediate data structures.
+   *
+   * Let's look at a simplified program trace for (a fragment of) the motivating
+   * example we started this chapter with,
+   *
+   * {{{
+   *  Stream(1,2,3,4).map(_ + 10).filter(_ % 2 == 0)
+   *  (11 #:: Stream(2,3,4).map(_ + 10)).filter(_ % 2 == 0)     // apply map to first element
+   *  Stream(2,3,4).map(_ + 10).filter(_ % 2 == 0)              // apply filter to first element
+   *  (12 #:: Stream(3,4).map(_ + 10)).filter(_ % 2 == 0)       // apply map to second element
+   *  12 #:: Stream(3,4).map(_ + 10).filter(_ % 2 == 0)         // apply filter to second element
+   *  12 #:: (13 #:: Stream(4).map(_ + 10)).filter(_ % 2 == 0)
+   *  12 #:: Stream(4).map(_ + 10).filter(_ % 2 == 0)
+   *  12 #:: (14 #:: Stream().map(_ + 10)).filter(_ % 2 == 0)
+   *  12 #:: 14 #:: Stream().map(_ + 10).filter(_ % 2 == 0)
+   *  12 #:: 14 #:: Stream()
+   * }}}
+   *
+   * Notice how the filter and map transformations are interleaved—the
+   * computation alternates between generating a single element of the output of
+   * map, and filter testing to see if that element is divisible by 2 (adding it
+   * to the output stream if it is), exactly as if we had interleaved these bits
+   * of logic in a special-purpose loop that combined both transformations.
+   *
+   * Notice we do not fully instantiate the intermediate stream that results
+   * from the map. For this reason, people sometimes describe streams as
+   * "first-class loops" whose logic can be combined using higher-order functions
+   * like map and filter. The incremental nature of stream transformations also
+   * has important consequences for memory usage. In a sequence of stream
+   * transformations like this, the garbage collector can usually reclaim the
+   * space needed for each intermediate stream element, as soon as that element
+   * is passed on to the next transformation. Here, for instance, the garbage
+   * collector can reclaim the space allocated for the value 13 emitted by map
+   * as soon as filter determines it isn't needed. Of course, this is a simple
+   * example; in other situations we might be dealing with larger numbers of
+   * elements, and the stream elements themselves could be large objects that
+   * retain significant amounts of memory. Being able to reclaim this memory as
+   * quickly as possible can cut down on the amount of memory required by your
+   * program as a whole.
+   */
+  def map[B](f: A => B): Stream[B] = foldRight(empty[B])((h, t) => {
+    println(s"map on value $h") // for testing purposes at the REPL
+    cons(f(h), t)
+  })
+
+  def filter(p: A => Boolean): Stream[A] = foldRight(empty[A])((h, t) => {
+    println(s"filter on value $h") // for testing purposes at the REPL
+    if (p(h)) cons(h, t) else t
+  })
+
+  override def toString: String = uncons match {
+    case Some((h, t)) => s"Stream($h, ?)"
+    case _ => "Stream(Nil)"
+  }
+
 }
 
 object Stream {
