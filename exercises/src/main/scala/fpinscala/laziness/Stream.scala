@@ -45,6 +45,24 @@ trait Stream[+A] {
   }
 
   /**
+   * Exercise 5.5:
+   *
+   * Use foldRight to implement takeWhile. This will construct a stream
+   * incrementally, and only if the values in the result are demanded by some
+   * other expression.
+   *
+   * The foldRight's recursion does not continue since the second parameter t of
+   * our function passed to foldRight, will not be evaluated until p(h) is true.
+   * The parameter t in fact stays at expression t.foldRight(z)(f) (see foldRight
+   * function definition above) unevaluated. The parameter h is evaluated only
+   * because it's needed for the test expression.
+   *
+   * @param p Predicate function
+   * @return Stream of n or less elements or even an empty Stream
+   */
+  def takeWhile_1(p: A => Boolean): Stream[A] = foldRight[Stream[A]](empty)((h, t) => if (p(h)) cons(h, t) else empty)
+
+  /**
    * Exercise 5.4:
    *
    * Implement forAll, which checks that all elements in the Stream match a

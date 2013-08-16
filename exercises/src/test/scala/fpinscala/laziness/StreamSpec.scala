@@ -39,4 +39,11 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
     assert(stream.forAll(_ < 10) === true)
   }
 
+  test("Take while predicate matches with takeWhile implemented in terms of foldRight") {
+    assert(stream.takeWhile(_ <= 2).toList === List(1,2))
+  }
+
+  test("Take while non of the elements within the stream match the predicate with takeWhile implemented in terms of foldRight") {
+    assert(stream.takeWhile(_ == 0).toList === Nil)
+  }
 }
