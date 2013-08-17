@@ -141,6 +141,18 @@ trait Stream[+A] {
     if (p(h)) cons(h, t) else t
   })
 
+  def append[B >: A](s: Stream[B]): Stream[B] = foldRight(s)((h, t) => {
+    println(s"append $s") // for testing purposes at the REPL
+    cons(h, t)
+  })
+
+  def flatMap[B](f:A => Stream[B]): Stream[B] = foldRight(empty[B])((h, t) =>
+    f(h).uncons match {
+      case Some((h2, t2)) => cons(h2, t)
+      case _ => t
+    }
+  )
+
   override def toString: String = uncons match {
     case Some((h, t)) => s"Stream($h, ?)"
     case _ => "Stream(Nil)"

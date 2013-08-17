@@ -58,4 +58,12 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
   test("Map and filter values of a Stream") {
     assert(Stream(1,2,3,4).map(_ + 10).filter(_ % 2 == 0).toList === List(12,14))
   }
+
+  test("Append to a Stream") {
+    assert(stream.append(stream).toList === List(1,2,3,1,2,3))
+  }
+
+  test("FlatMap a Stream") {
+    assert(stream.flatMap(e => Stream(e + 10)).toList === List(11,12,13))
+  }
 }
