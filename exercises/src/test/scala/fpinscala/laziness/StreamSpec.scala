@@ -66,4 +66,13 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
   test("FlatMap a Stream") {
     assert(stream.flatMap(e => Stream(e + 10)).toList === List(11,12,13))
   }
+
+  test("FlatMap an empty Stream") {
+    assert(emptyStream.flatMap(e => Stream(e)).toList === Nil)
+  }
+
+  test("FlatMap a Stream (with given solution)") {
+    assert(stream.flatMap_1(e => Stream(e + 10)).toList === List(11,12,13))
+  }
+
 }

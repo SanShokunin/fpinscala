@@ -153,6 +153,9 @@ trait Stream[+A] {
     }
   )
 
+  // The given answer.
+  def flatMap_1[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, t) => f(h) append t)
+
   override def toString: String = uncons match {
     case Some((h, t)) => s"Stream($h, ?)"
     case _ => "Stream(Nil)"
