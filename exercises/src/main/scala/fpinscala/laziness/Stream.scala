@@ -200,6 +200,16 @@ object Stream {
    */
   def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
+  /**
+   * Exercise 5.9:
+   *
+   * Write a function fibs that generates the infinite stream of Fibonacci
+   * numbers: 0, 1, 1, 2, 3, 5, 8, and so on.
+   *
+   * @return Infinite Stream of Fibonacci numbers
+   */
+  def fibs(a: Int = 0, b: Int = 1): Stream[Int] = cons(a, fibs(b, a + b))
+
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
