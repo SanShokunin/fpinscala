@@ -210,6 +210,11 @@ object Stream {
    */
   def fibs(a: Int = 0, b: Int = 1): Stream[Int] = cons(a, fibs(b, a + b))
 
+  val fibs = {
+    def go(f0: Int, f1: Int): Stream[Int] = cons(f0, go(f1, f0+f1))
+    go(0, 1)
+  }
+
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
