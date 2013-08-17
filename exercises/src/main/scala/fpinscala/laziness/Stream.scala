@@ -198,7 +198,7 @@ object Stream {
    * @param n Start value
    * @return Infinite Stream of integers incremented by 1 at each iteration
    */
-  def from(n: Int): Stream[Int] = ???
+  def from(n: Int): Stream[Int] = cons(n, from(n + 1))
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 
