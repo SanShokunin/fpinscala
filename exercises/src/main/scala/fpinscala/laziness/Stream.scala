@@ -178,7 +178,27 @@ object Stream {
 
   val ones: Stream[Int] = cons(1, ones)
 
-  def from(n: Int): Stream[Int] = sys.error("todo")
+  /**
+   * Exercise 5.7:
+   *
+   * Generalize ones slightly to the function constant which returns an infinite
+   * Stream of a given value.
+   *
+   * @param a Value of which an infinite Stream should be generated
+   * @return Infinite Stream of the given value
+   */
+  def constant[A](a: A): Stream[A] = cons(a, constant(a))
+
+  /**
+   * Exercise 5.8:
+   *
+   * Write a function that generates an infinite stream of integers, starting
+   * from n, then n + 1, n + 2, etc.
+   *
+   * @param n Start value
+   * @return Infinite Stream of integers incremented by 1 at each iteration
+   */
+  def from(n: Int): Stream[Int] = ???
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 
