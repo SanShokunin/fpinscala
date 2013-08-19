@@ -175,7 +175,7 @@ trait Stream[+A] {
   })
 
   def takeWhileViaUnfold(p: A => Boolean): Stream[A] = unfold(this)( _.uncons match {
-    case Some((h, t)) if p(h) => Some((h, t))
+    case s@Some((h, t)) if p(h) => s
     case _ => None
   })
 
