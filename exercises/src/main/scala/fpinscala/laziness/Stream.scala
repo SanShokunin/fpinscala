@@ -1,6 +1,7 @@
 package fpinscala.laziness
 
 import Stream._
+import scala.Option
 
 trait Stream[+A] {
 
@@ -215,7 +216,48 @@ object Stream {
     go(0, 1)
   }
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
+  /**
+   * Exercise 5.10:
+   *
+   * We can write a more general stream building function. It takes an initial
+   * state, and a function for producing both the next state and the next value
+   * in the generated stream.
+   *
+   * Option is used to indicate when the Stream should be terminated, if at all.
+   * The function unfold is the most general Stream-building function. Notice
+   * how closely it mirrors the structure of the Stream data type.
+   * unfold and the functions we can implement with it are examples of what is
+   * sometimes called a corecursive function. While a recursive function
+   * consumes data and eventually terminates, a corecursive function produces
+   * data and coterminates. We say that such a function is productive, which
+   * just means that we can always evaluate more of the result in a finite
+   * amount of time (for unfold, we just need to run the function f one more
+   * time to generate the next element). Corecursion is also sometimes called
+   * guarded recursion.
+   *
+   * @param z Initial state of the Stream to be produced
+   * @param f Function which generates the next value of the Stream
+   * @tparam A Type of Stream elements
+   * @tparam S Type of data structure to be passed through
+   * @return Stream[A]
+   */
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+    case Some((h, t)) => cons(h, unfold(t)(f))
+    case _ => empty
+  }
+
+  /**
+   * Exercise 5.11:
+   *
+   * Write fibs, from, constant, and ones in terms of unfold.
+   */
+  val fibs_1 = cons(0, unfold((0,1)) { case (a, b) => Some((b, (b, a + b))) })
+
+  def from_1(n: Int): Stream[Int] = unfold(n)(n => Some(n, n + 1))
+
+  def constant_1[A](a: A): Stream[A] = unfold(a)(a => Some(a, a))
+
+  val ones_1: Stream[Int] = constant_1(1)
 
   def startsWith[A](s: Stream[A], s2: Stream[A]): Boolean = sys.error("todo")
 
