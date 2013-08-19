@@ -75,4 +75,24 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
     assert(stream.flatMap_1(e => Stream(e + 10)).toList === List(11,12,13))
   }
 
+  test("Map (via unfold) values of a Stream") {
+    assert(stream.mapViaUnfold(_ + 10).toList === List(11,12,13))
+  }
+
+  test("Take (via unfold) the first n elements of a stream") {
+    assert(stream.takeViaUnfold(2).toList === List(1,2))
+  }
+
+  test("Take (via unfold) the first n elements of an empty stream") {
+    assert(emptyStream.takeViaUnfold(2).toList === Nil)
+  }
+
+  test("Take (via unfold) 4 elements of a stream with 3 elements") {
+    assert(stream.takeViaUnfold(4).toList === List(1,2,3))
+  }
+
+  test("Take while predicate matches with takeWhile implemented in terms of unfold") {
+    assert(stream.takeWhileViaUnfold(_ <= 2).toList === List(1,2))
+  }
+
 }

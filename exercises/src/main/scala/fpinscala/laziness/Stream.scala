@@ -157,6 +157,32 @@ trait Stream[+A] {
   // The given answer.
   def flatMap_1[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((h, t) => f(h) append t)
 
+  /**
+   * Exercise 5.12:
+   *
+   * Use unfold to implement map, take, takeWhile, zip (as in chapter 3), and
+   * zipAll.
+   *
+   * The zipAll function should continue the traversal as long as either stream
+   * has more elements — it uses Option to indicate whether each stream has been
+   * exhausted.
+   */
+  def mapViaUnfold[B](f: A => B): Stream[B] = unfold(this)( _.uncons.map { case (h, t) => (f(h), t) })
+
+  def takeViaUnfold(n: Int): Stream[A] = unfold((n, uncons))(_ match {
+    case (n, Some((h, t))) if n > 0 => Some((h, (n - 1, t uncons)))
+    case _ => None
+  })
+
+  def takeWhileViaUnfold(p: A => Boolean): Stream[A] = unfold(this)( _.uncons match {
+    case Some((h, t)) if p(h) => Some((h, t))
+    case _ => None
+  })
+
+  def zip[B](s2: Stream[B]): Stream[(A,B)] = ???
+
+  def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] = ???
+
   override def toString: String = uncons match {
     case Some((h, t)) => s"Stream($h, ?)"
     case _ => "Stream(Nil)"
@@ -170,7 +196,7 @@ object Stream {
   
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = 
     new Stream[A] {
-      lazy val uncons = Some((hd, tl)) 
+      lazy val uncons = Some((hd, tl))
     }
   
   def apply[A](as: A*): Stream[A] =
