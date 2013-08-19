@@ -95,4 +95,23 @@ class StreamSpec extends FunSuite with BeforeAndAfter {
     assert(stream.takeWhileViaUnfold(_ <= 2).toList === List(1,2))
   }
 
+  ignore("Zip Streams via unfold") {
+    // TODO
+  }
+
+  ignore("Zip Streams (via unfold) as long as either stream has more elements") {
+    // TODO
+  }
+
+  ignore("Check if one Stream is a prefix of another") {
+    // TODO
+  }
+
+  ignore("For a given Stream, tails returns the Stream of suffixes of the input sequence, starting with the original Stream") {
+    // TODO assert(stream.tails === Stream(Stream(1,2,3), Stream(2,3), Stream(3), Stream.empty))
+  }
+
+  ignore("Stream.tails in terms of scanRight") {
+    // TODO assert(stream.tailsViaScanRight === Stream(Stream(1,2,3), Stream(2,3), Stream(3), Stream.empty))
+  }
 }
