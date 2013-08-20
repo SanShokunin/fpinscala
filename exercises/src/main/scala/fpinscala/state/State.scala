@@ -15,6 +15,23 @@ object RNG {
     }
   }
 
+  /**
+   * Looking at our implementations of exercises 6.{1,2,3,4}, we notice a common
+   * pattern:
+   *
+   * each of our functions has a type of the form RNG => (A, RNG) for some type A.
+   *
+   * Functions of this type describe state actions that transform RNG states, and
+   * these state actions can be built up and combined using general-purpose
+   * functions. To make them convenient to talk about, let's make a type alias for
+   * the RNG state action data type: `Rand[+A]`.
+   *
+   * We can now turn methods such as RNG's nextInt into values of this type:
+   *
+   * {{{val int: Rand[Int] = _.nextInt}}}
+   *
+   * @tparam A
+   */
   type Rand[+A] = RNG => (A, RNG)
 
   val int: Rand[Int] = _.nextInt
