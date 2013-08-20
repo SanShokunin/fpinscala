@@ -165,7 +165,32 @@ object RNG {
 
   val doubleIntViaMap2: Rand[(Double, Int)] = map2(int, double)((i, d) => (d, i))
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = sys.error("todo")
+  /**
+   * Exercise 6.8 (hard):
+   *
+   * If we can combine two RNG transitions, we should be able to combine a whole
+   * list of them. Implement `sequence, for combining a List of transitions into
+   * a single transition.
+   *
+   * Use it to reimplement the ints function you wrote before. For the latter,
+   * you can use the standard library function `List.fill(n)(x)` to make a list
+   * with x repeated n times.
+   *
+   * In `sequence`, the base case of the fold is a `unit` action that returns
+   * the empty list. At each step in the fold, we accumulate in `acc` and `f`
+   * is the current element in the list. `map2(f, acc)(_ :: _)` results in a
+   * value of type `Rand[List[A]]`. We map over that to prepend (cons) the
+   * element onto the accumulated list. We are using `foldRight`. If we used
+   * `foldLeft` then the values in the resulting list would appear in reverse
+   * order.
+   *
+   * @param fs
+   * @tparam A
+   * @return
+   */
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = fs.foldRight(unit(Nil:List[A]))((f, acc) => map2(f, acc)(_ :: _))
+
+  def intsViaSequence(count: Int): Rand[List[Int]] = sequence(List.fill(count)(int))
 
   def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = sys.error("todo")
 
