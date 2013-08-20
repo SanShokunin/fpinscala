@@ -36,9 +36,23 @@ object RNG {
 
   val int: Rand[Int] = _.nextInt
 
+  /**
+   * A simple RNG-transition is the unit action, which passes the RNG state
+   * through without using it, always returning a constant value rather than a
+   * random value.
+   *
+   * In `sequence`, the base case of the fold is a `unit` action that returns
+   * the empty list.
+   */
   def unit[A](a: A): Rand[A] =
     rng => (a, rng)
 
+  /**
+   * There is also map, for transforming the output of a state action without
+   * modifying the state itself. Remember, Rand[A] is just a type alias for a
+   * function type RNG => (A, RNG), so this is just a kind of function
+   * composition.
+   */
   def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
     rng => {
       val (a, rng2) = s(rng)
