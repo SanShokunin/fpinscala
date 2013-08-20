@@ -120,7 +120,22 @@ object RNG {
     go(count, rng, Nil)
   }
 
-  def positiveMax(n: Int): Rand[Int] = sys.error("todo")
+  /**
+   * Exercise 6.5:
+   *
+   * Use map to generate an Int between 0 and n, inclusive.
+   *
+   * @param n The upper bound integer value.
+   * @return type Rand[+A], i.e. RNG => (A, RNG)
+   */
+  def positiveMax(n: Int): Rand[Int] = map(positiveInt)(_ / (Int.MaxValue / n))
+
+  /**
+   * Exercise 6.6:
+   *
+   * Use map to reimplement RNG.double in a more elegant way.
+   */
+  val doubleViaMap: Rand[Double] = map(int)(_ / (Int.MaxValue.toDouble + 1))
 
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = sys.error("todo")
 
