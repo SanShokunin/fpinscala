@@ -137,7 +137,33 @@ object RNG {
    */
   val doubleViaMap: Rand[Double] = map(int)(_ / (Int.MaxValue.toDouble + 1))
 
-  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = sys.error("todo")
+  /**
+   * Exercise 6.7:
+   *
+   * Unfortunately, map is not powerful enough to implement intDouble and
+   * doubleInt from before. What we need is a new combinator map2, that can
+   * combine two RNG actions into one using a binary rather than unary function.
+   * Write its implementation and then use it to reimplement the intDouble and
+   * doubleInt functions.
+   *
+   * @param ra
+   * @param rb
+   * @param f
+   * @tparam A
+   * @tparam B
+   * @tparam C
+   * @return
+   */
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
+    rng => {
+      val (a, rng2) = ra(rng)
+      val (b, rng3) = rb(rng2)
+      (f(a, b), rng3)
+    }
+
+  val intDoubleViaMap2: Rand[(Int, Double)] = map2(int, double)((i, d) => (i, d))
+
+  val doubleIntViaMap2: Rand[(Double, Int)] = map2(int, double)((i, d) => (d, i))
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = sys.error("todo")
 
