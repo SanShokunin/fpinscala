@@ -269,22 +269,46 @@ object RNG {
 
 }
 
-case class State[S,+A](run: S => (A, S)) {
-  def map[B](f: A => B): State[S, B] =
-    sys.error("todo")
-  def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    sys.error("todo")
-  def flatMap[B](f: A => State[S, B]): State[S, B] =
-    sys.error("todo")
-}
-
 sealed trait Input
 case object Coin extends Input
 case object Turn extends Input
 
 case class Machine(locked: Boolean, candies: Int, coins: Int)
 
+/**
+ * Exercise 6.11:
+ *
+ * Generalize the functions unit, map, map2, flatMap, and sequence. Add them as
+ * methods on the State case class where possible. Otherwise you should put
+ * them in a State companion object.
+ *
+ * The functions you've just written, unit, map, map2, flatMap, and sequence,
+ * are not really specific to random number generation at all. They are general-
+ * purpose functions for working with state actions, and don't actually care
+ * about the type of the state.
+ */
+case class State[S,+A](run: S => (A, S)) {
+
+  def map[B](f: A => B): State[S, B] = flatMap(a => State.unit(f(a)))
+
+  def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] = flatMap(a => sb.map(b => f(a, b)))
+
+  def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
+    val (a, s1) = run(s)
+    f(a).run(s1)
+  })
+
+}
+
 object State {
+
+  def unit[S, A](a: A): State[S, A] = State(s => (a, s))
+
+  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] =
+    fs.foldRight(unit[S, List[A]](Nil))((s, acc) => s.map2(acc)(_ :: _))
+
   type Rand[A] = State[RNG, A]
+
   def simulateMachine(inputs: List[Input]): State[Machine, Int] = sys.error("todo")
+
 }
