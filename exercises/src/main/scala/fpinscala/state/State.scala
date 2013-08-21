@@ -269,12 +269,6 @@ object RNG {
 
 }
 
-sealed trait Input
-case object Coin extends Input
-case object Turn extends Input
-
-case class Machine(locked: Boolean, candies: Int, coins: Int)
-
 /**
  * Exercise 6.11:
  *
@@ -298,6 +292,15 @@ case class State[S,+A](run: S => (A, S)) {
     f(a).run(s1)
   })
 
+  /**
+   * Exercise 6.12:
+   *
+   * Come up with the signatures for get and set, then write their implementations.
+   */
+  def get[S]: State[S, S] = State(s => (s, s))
+
+  def set[S](s: S): State[S, Unit] = State(_ => ((), s))
+
 }
 
 object State {
@@ -312,3 +315,9 @@ object State {
   def simulateMachine(inputs: List[Input]): State[Machine, Int] = sys.error("todo")
 
 }
+
+sealed trait Input
+case object Coin extends Input
+case object Turn extends Input
+
+case class Machine(locked: Boolean, candies: Int, coins: Int)
