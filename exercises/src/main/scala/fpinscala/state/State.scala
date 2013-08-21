@@ -2,10 +2,13 @@ package fpinscala.state
 
 
 trait RNG {
+
   def nextInt: (Int, RNG) // Should generate a random `Int`. We will later define other functions in terms of `nextInt`.
+
 }
 
 object RNG {
+
   def simple(seed: Long): RNG = new RNG {
     def nextInt = {
       val seed2 = (seed*0x5DEECE66DL + 0xBL) & // `&` is bitwise AND
@@ -206,7 +209,49 @@ object RNG {
 
   def intsViaSequence(count: Int): Rand[List[Int]] = sequence(List.fill(count)(int))
 
-  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = sys.error("todo")
+  /**
+   * Exercise 6.9:
+   *
+   * Implement flatMap, then use it to reimplement positiveInt.
+   *
+   * We're starting to see a pattern: We're progressing towards implementations
+   * that don't explicitly mention or pass along the RNG value. The map and
+   * map2 combinators allowed us to implement, in a rather succinct and elegant
+   * way, functions that were otherwise tedious and error-prone to write. But
+   * there are some functions that we can't very well write in terms of map and
+   * map2.
+   *
+   * Let's go back to positiveInt and see if it can be implemented in terms of
+   * map. It's possible to get most of the way there, but what do we do in the
+   * case that Int.MinValue is generated? It doesn't have a positive counterpart
+   * and we can't just select an arbitrary number:
+   *
+   * {{{
+   *   def positiveInt: Rand[Int] = {
+   *     map(int) { i =>
+   *       if (i != Int.MinValue) i.abs else ?? // What goes here?
+   *     }
+   *   }
+   * }}}
+   *
+   * We want to retry the generator in the case of Int.MinValue, but we don't
+   * actually have an RNG! Besides, anything except an Int there would have the
+   * wrong type. So we clearly need a more powerful combinator than map.
+   */
+  def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] =
+    rng => {
+      val (a, r2) = f(rng)
+      // Note: The appending `(r2)` executes the function `rng => (a, rng)`
+      // returned by `g(a)` which finally results in a `(B, RNG)` expression.
+      g(a)(r2)
+    }
+
+  def positiveIntViaFlatMap: Rand[Int] = flatMap(int) { a =>
+    a match {
+      case Int.MinValue => positiveIntViaFlatMap
+      case i => unit(i.abs)
+    }
+  }
 
 }
 
