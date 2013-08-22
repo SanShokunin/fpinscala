@@ -281,9 +281,13 @@ object RNG {
  * purpose functions for working with state actions, and don't actually care
  * about the type of the state.
  */
+
+import State._
+
 case class State[S,+A](run: S => (A, S)) {
 
-  def map[B](f: A => B): State[S, B] = flatMap(a => State.unit(f(a)))
+
+  def map[B](f: A => B): State[S, B] = flatMap(a => unit(f(a)))
 
   def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] = flatMap(a => sb.map(b => f(a, b)))
 
@@ -291,6 +295,17 @@ case class State[S,+A](run: S => (A, S)) {
     val (a, s1) = run(s)
     f(a).run(s1)
   })
+
+}
+
+object State {
+
+  type Rand[A] = State[RNG, A]
+
+  def unit[S, A](a: A): State[S, A] = State(s => (a, s))
+
+  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] =
+    fs.foldRight(unit[S, List[A]](Nil))((s, acc) => s.map2(acc)(_ :: _))
 
   /**
    * Exercise 6.12:
@@ -301,23 +316,51 @@ case class State[S,+A](run: S => (A, S)) {
 
   def set[S](s: S): State[S, Unit] = State(_ => ((), s))
 
-}
-
-object State {
-
-  def unit[S, A](a: A): State[S, A] = State(s => (a, s))
-
-  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] =
-    fs.foldRight(unit[S, List[A]](Nil))((s, acc) => s.map2(acc)(_ :: _))
-
-  type Rand[A] = State[RNG, A]
-
-  def simulateMachine(inputs: List[Input]): State[Machine, Int] = sys.error("todo")
+  def modify[S](f: S => S): State[S, Unit] = for {
+    s <- get
+    _ <- set(f(s))
+  } yield ()
 
 }
 
+/**
+ * Exercise 6.13 (hard):
+ *
+ * To gain experience with the use of State, implement a simulation of a simple
+ * candy dispenser. The machine has two types of input: You can insert a coin,
+ * or you can turn the knob to dispense candy. It can be in one of two states:
+ * locked or unlocked. It also tracks how many candies are left and how many
+ * coins it contains.
+ *
+ * The rules of the machine are as follows:
+ *
+ * - Inserting a coin into a locked machine will cause it to unlock if there is any candy left.
+ * - Turning the knob on an unlocked machine will cause it to dispense candy and become locked.
+ * - Turning the knob on a locked machine or inserting a coin into an unlocked machine does nothing.
+ * - A machine that is out of candy ignores all inputs.
+ *
+ * The method simulateMachine should operate the machine based on the list of
+ * inputs and return the number of coins left in the machine at the end. Note
+ * that if the input Machine has 10 coins in it, and a net total of 4 coins are
+ * added in the inputs, the output will be 14.
+ */
 sealed trait Input
 case object Coin extends Input
 case object Turn extends Input
 
 case class Machine(locked: Boolean, candies: Int, coins: Int)
+
+object Candy {
+
+  def simulateMachine(inputs: List[Input]): State[Machine, Int] = for {
+    _ <- State.sequence(inputs.map(i => modify((s: Machine) => (i, s) match {
+           case (_, Machine(_, 0, _)) => s
+           case (Coin, Machine(false, _, _)) => s
+           case (Turn, Machine(true, _, _)) => s
+           case (Coin, Machine(true, candy, coin)) => Machine(false, candy, coin + 1)
+           case (Turn, Machine(false, candy, coin)) => Machine(true, candy - 1, coin)
+         })))
+    s <- get
+  } yield s.coins
+
+}

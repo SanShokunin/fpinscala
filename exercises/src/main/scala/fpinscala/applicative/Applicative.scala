@@ -4,7 +4,8 @@ package applicative
 import monads.Functor
 import state._
 import State._
-import StateUtil._ // defined at bottom of this file
+// must not import this any more, since exercises 6.{12,13} are implemented
+// import StateUtil._ // defined at bottom of this file
 import monoids._
 
 trait Applicative[F[_]] extends Functor[F] {
