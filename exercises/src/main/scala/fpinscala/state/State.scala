@@ -286,15 +286,19 @@ import State._
 
 case class State[S,+A](run: S => (A, S)) {
 
-
   def map[B](f: A => B): State[S, B] = flatMap(a => unit(f(a)))
 
   def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] = flatMap(a => sb.map(b => f(a, b)))
 
-  def flatMap[B](f: A => State[S, B]): State[S, B] = State(s => {
-    val (a, s1) = run(s)
-    f(a).run(s1)
-  })
+  def flatMap[B](f: A => State[S, B]): State[S, B] = {
+    println("called State.flatMap")
+    State(s => {
+      val (a, s1) = run(s)
+      val (a1, s2) = f(a).run(s1) // Here the f() is the function block passed from modify -> get flatMap { <f(...)> }
+      //println(s"called set function from modify via f(), result is $s2")
+      (a1, s2)
+    })
+  }
 
 }
 
@@ -312,14 +316,34 @@ object State {
    *
    * Come up with the signatures for get and set, then write their implementations.
    */
-  def get[S]: State[S, S] = State(s => (s, s))
+  def get[S]: State[S, S] = {
+    println("in State.get")
+    State(s => (s, s))
+  }
 
-  def set[S](s: S): State[S, Unit] = State(_ => ((), s))
+  def set[S](s: S): State[S, Unit] = {
+    println("in State.set")
+    State(_ => ((), s))
+  }
 
-  def modify[S](f: S => S): State[S, Unit] = for {
+  def modifyViaFor[S](f: S => S): State[S, Unit] = for {
     s <- get
     _ <- set(f(s))
   } yield ()
+
+  def modify[S](f: S => S): State[S, Unit] = {
+    println("Step 2.3: in State.modify")
+    get flatMap { s => // NOTE: At this point `modify` returns the first time to caller
+      // NOTE: This code block gets executed as f() in flatMap later on.
+      println("Step 3.1: in State.modify: Apply state changes now!")
+      def state = set(f(s)) map { _ =>
+        println("Step 3.3: in State.modify.set(f(s)).map")
+        ()
+      }
+      println("Step 3.2: in State.modify: State changes applied")
+      state
+    }
+  }
 
 }
 
@@ -355,12 +379,13 @@ object Candy {
   def simulateMachine(inputs: List[Input]): State[Machine, Int] = for {
     _ <- State.sequence(
            inputs.map(i =>
-             modify((s: Machine) => (i, s) match {
-               case (_, Machine(_, 0, _)) => s
-               case (Coin, Machine(false, _, _)) => s
-               case (Turn, Machine(true, _, _)) => s
-               case (Coin, Machine(true, candy, coin)) => Machine(false, candy, coin + 1)
-               case (Turn, Machine(false, candy, coin)) => Machine(true, candy - 1, coin)
+             modify((s: Machine) =>
+               (i, s) match {
+                 case (_, Machine(_, 0, _)) => s
+                 case (Coin, Machine(false, _, _)) => s
+                 case (Turn, Machine(true, _, _)) => s
+                 case (Coin, Machine(true, candy, coin)) => Machine(false, candy, coin + 1)
+                 case (Turn, Machine(false, candy, coin)) => Machine(true, candy - 1, coin)
              })
            )
          )
