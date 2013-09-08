@@ -291,7 +291,7 @@ case class State[S,+A](run: S => (A, S)) {
   def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] = flatMap(a => sb.map(b => f(a, b)))
 
   def flatMap[B](f: A => State[S, B]): State[S, B] = {
-    println("called State.flatMap")
+    //println("called State.flatMap")
     State(s => {
       val (a, s1) = run(s)
       val (a1, s2) = f(a).run(s1) // Here the f() is the function block passed from modify -> get flatMap { <f(...)> }
@@ -308,8 +308,10 @@ object State {
 
   def unit[S, A](a: A): State[S, A] = State(s => (a, s))
 
-  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] =
+  def sequence[S, A](fs: List[State[S, A]]): State[S, List[A]] = {
+    println("Step 2.5: in State.sequence (reduce list of state into one (?) state)")
     fs.foldRight(unit[S, List[A]](Nil))((s, acc) => s.map2(acc)(_ :: _))
+  }
 
   /**
    * Exercise 6.12:

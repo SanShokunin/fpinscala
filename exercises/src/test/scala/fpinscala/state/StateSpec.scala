@@ -59,7 +59,7 @@ class StateSpec extends FunSuite {
           state
         }
       }
-      println("Step 2.5: call to Test.sequence finished.")
+      println("Step 2.6: call to Test.sequence finished.")
       seq
     }
 
