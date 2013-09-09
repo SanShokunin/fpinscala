@@ -1,7 +1,8 @@
 package fpinscala.parallelism
 
 import org.scalatest.FunSuite
-import java.util.concurrent.Executors
+import java.util.concurrent.{ExecutorService, Executors}
+import fpinscala.parallelism.Par.{Par, UnitFuture}
 
 class ParSpec extends FunSuite {
 
@@ -17,6 +18,11 @@ class ParSpec extends FunSuite {
   test("convert a function A => B to one that evaluates its result asynchronously") {
     val asyncF = Par.asyncF((i: Int) => i * 2)
     assert(asyncF(3)(es).get === 6)
+  }
+
+  test("sort Par[List[Int]]") {
+    val par: Par[List[Int]] = (es: ExecutorService) => UnitFuture(List(2,3,4,1))
+    assert(Par.sortPar(par)(es).get === List(1,2,3,4))
   }
 
 }

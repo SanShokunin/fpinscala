@@ -54,9 +54,9 @@ object Par {
    */
   def asyncF[A,B](f: A => B): A => Par[B] = (a) => async(f(a))
 
-  def map[A,B](fa: Par[A])(f: A => B): Par[B] = ???
+  def map[A,B](fa: Par[A])(f: A => B): Par[B] = map2(fa, unit(()))((a,_) => f(a))
 
-  def sortPar(l: Par[List[Int]]) = ???
+  def sortPar(l: Par[List[Int]]) = map(l)(_.sorted)
 
   def equal[A](e: ExecutorService)(p: Par[A], p2: Par[A]): Boolean = ???
 
