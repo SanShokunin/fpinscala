@@ -25,4 +25,8 @@ class ParSpec extends FunSuite {
     assert(Par.sortPar(par)(es).get === List(1,2,3,4))
   }
 
+  test("convert List[Par[B]] to the Par[List[B]]") {
+    val l = List(Par.unit(1), Par.unit(2), Par.unit(3))
+    assert(Par.sequence(l)(es).get === Par.unit(List(1,2,3))(es).get)
+  }
 }

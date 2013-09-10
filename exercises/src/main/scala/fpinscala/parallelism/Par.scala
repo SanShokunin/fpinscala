@@ -58,6 +58,21 @@ object Par {
 
   def sortPar(l: Par[List[Int]]) = map(l)(_.sorted)
 
+  /**
+   * Exercise 7.5:
+   *
+   * Let's write this function, called sequence. No additional primitives are
+   * required.
+   */
+  def sequence[A](l: List[Par[A]]): Par[List[A]] =
+    (es: ExecutorService) =>
+      UnitFuture(l.foldRight(List[A]())((par: Par[A], a: List[A]) => par(es).get :: a))
+
+  def parMap[A,B](l: List[A])(f: A => B): Par[List[B]] = fork {
+    val fbs: List[Par[B]] = l.map(asyncF(f))
+    sequence(fbs)
+  }
+
   def equal[A](e: ExecutorService)(p: Par[A], p2: Par[A]): Boolean = ???
 
   def delay[A](fa: => Par[A]): Par[A] = ???
